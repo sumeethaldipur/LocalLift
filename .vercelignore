@@ -1,0 +1,10 @@
+.venv
+data
+docs
+tests
+scripts
+output
+.claude
+.env
+__pycache__
+.pytest_cache

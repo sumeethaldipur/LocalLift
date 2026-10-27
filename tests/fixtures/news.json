@@ -1,0 +1,11 @@
+[
+  {"id": "news:fixture-1", "provider": "gothamist", "url": "https://example.test/news/fixture-band-adds-date",
+   "title": "Fixture Band adds surprise guest for Midtown arena show", "domain": "example.test",
+   "summary": "The Fixture Band show near Penn Station adds a guest.", "published_in_hours": -5, "dedupe_key": "fx1"},
+  {"id": "news:fixture-1-syndicated", "provider": "gothamist", "url": "https://example.test/syndicated/fixture-band",
+   "title": "Fixture Band adds surprise guest for Midtown arena show", "domain": "example.test",
+   "summary": "Syndicated copy.", "published_in_hours": -4, "dedupe_key": "fx1"},
+  {"id": "news:fixture-old", "provider": "gothamist", "url": "https://example.test/news/fixture-band-review",
+   "title": "Review: Fixture Band dazzles at Fixture Arena", "domain": "example.test",
+   "summary": "A look back.", "published_in_hours": 120, "dedupe_key": "fx2"}
+]

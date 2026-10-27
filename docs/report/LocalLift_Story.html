@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LocalLift — The Story</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #1d1a24; --soft: #5d5868; --faint: #8e8898; --line: #ece7f0;
+    --paper: #fffdfb; --cream: #fbf6f1;
+    --orange: #ff8a4c; --pink: #ff3d8b; --violet: #8b5cf6; --teal: #14b8a6; --sky: #0ea5e9; --amber: #f59e0b;
+    --grad: linear-gradient(120deg, #ff8a4c 0%, #ff3d8b 50%, #8b5cf6 100%);
+    --night: #16121c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink);
+    font: 400 10.4pt/1.62 Inter, system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 794px; height: 1123px; padding: 20mm 19mm 18mm; position: relative; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+  h1, h2, h3, h4 { font-family: "Plus Jakarta Sans", Inter, sans-serif; margin: 0; letter-spacing: -.01em; }
+  h2 { font-size: 23pt; line-height: 1.15; font-weight: 800; margin: 4px 0 10px; }
+  h3 { font-size: 13pt; font-weight: 700; margin: 18px 0 6px; }
+  h4 { font-size: 10.5pt; font-weight: 700; margin: 0 0 4px; }
+  p { margin: 0 0 9px; }
+  .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .kicker { font: 700 8pt/1 "Plus Jakarta Sans"; letter-spacing: .16em; text-transform: uppercase; color: var(--pink); display: flex; align-items: center; gap: 8px; }
+  .kicker .num { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--grad); color: #fff; letter-spacing: 0; font-size: 9pt; }
+  .lead { font: 500 12pt/1.55 Inter; color: var(--soft); margin-bottom: 14px; }
+  .serif { font-family: Fraunces, Georgia, serif; }
+  .muted { color: var(--soft); }
+  .small { font-size: 8.8pt; }
+  .footer { position: absolute; bottom: 9mm; left: 19mm; right: 19mm; display: flex; justify-content: space-between;
+    font: 600 7.5pt/1 "Plus Jakarta Sans"; color: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
+  .footer .bar { flex: 1; height: 1px; background: var(--line); margin: 0 12px; align-self: center; }
+
+  /* cover */
+  .cover { background: var(--night); color: #fff; padding: 0; }
+  .cover .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .75; }
+  .cover .b1 { width: 120mm; height: 120mm; background: #ff8a4c; top: -30mm; left: -30mm; }
+  .cover .b2 { width: 130mm; height: 130mm; background: #ff3d8b; top: 60mm; right: -50mm; opacity: .6; }
+  .cover .b3 { width: 140mm; height: 140mm; background: #8b5cf6; bottom: -50mm; left: 20mm; opacity: .6; }
+  .cover .inner { position: relative; padding: 26mm 22mm; height: 1123px; display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 12px; font: 800 15pt "Plus Jakarta Sans"; }
+  .brand .mark { width: 40px; height: 40px; border-radius: 12px; background: var(--grad); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(255,61,139,.45); }
+  .cover h1 { font-size: 44pt; line-height: 1.04; font-weight: 800; margin-top: 30mm; letter-spacing: -.03em; }
+  .cover .sub { font: 500 14pt/1.5 Inter; color: rgba(255,255,255,.82); margin-top: 16px; max-width: 140mm; }
+  .cover .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; margin-bottom: 12mm; }
+  .cover .chip { padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); font: 600 8.5pt Inter; }
+  .cover .shot-wrap { margin-top: auto; flex: none; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 30px 80px rgba(0,0,0,.5); max-height: 92mm; }
+  .cover .shot-wrap img { width: 100%; display: block; }
+  .cover .meta { display: flex; justify-content: space-between; margin-top: 12mm; font: 600 8pt "Plus Jakarta Sans"; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+
+  /* blocks */
+  .story { background: var(--cream); border-radius: 16px; padding: 16px 18px; border: 1px solid #f2e8de; margin: 12px 0; }
+  .story p:last-child { margin: 0; }
+  .quote { font: 500 14pt/1.45 Fraunces, Georgia, serif; color: var(--ink); border-left: 4px solid; border-image: var(--grad) 1; padding: 2px 0 2px 16px; margin: 14px 0; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .tile { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: #fff; }
+  .tile .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; color: #fff; font: 800 11pt "Plus Jakarta Sans"; margin-bottom: 8px; }
+  .tile p { font-size: 9.2pt; color: var(--soft); margin: 0; }
+  .c1 { background: linear-gradient(135deg,#ff8a4c,#ff3d8b); } .c2 { background: linear-gradient(135deg,#ff3d8b,#8b5cf6); }
+  .c3 { background: linear-gradient(135deg,#8b5cf6,#0ea5e9); } .c4 { background: linear-gradient(135deg,#0ea5e9,#14b8a6); }
+  .c5 { background: linear-gradient(135deg,#14b8a6,#84cc16); } .c6 { background: linear-gradient(135deg,#f59e0b,#ff8a4c); }
+
+  figure { margin: 12px 0 6px; }
+  .side { display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px; align-items: start; margin-top: 8px; }
+  .side figure { margin-top: 0; }
+  .crop { position: relative; overflow: hidden; }
+  .crop::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 60px; background: linear-gradient(transparent, #16121c); }
+  .pointlist { list-style: none; padding: 0; margin: 0; }
+  .pointlist li { padding: 10px 0 10px 14px; border-bottom: 1px dashed var(--line); position: relative; font-size: 9.4pt; }
+  .pointlist li::before { content: ""; position: absolute; left: 0; top: 16px; width: 6px; height: 6px; border-radius: 50%; background: var(--pink); }
+  .pointlist li b { font-family: "Plus Jakarta Sans"; display: block; font-size: 10pt; color: var(--ink); }
+  .memo { background: var(--night); color: #f3eef8; border-radius: 14px; padding: 16px 18px; font: 500 8.8pt/1.6 Inter; white-space: pre-line; box-shadow: 0 14px 34px rgba(40,20,60,.18); }
+  .memo .t { font: 800 10pt "Plus Jakarta Sans"; color: #ffd2b8; display: block; margin-bottom: 4px; }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  figure .frame { border-radius: 12px; overflow: hidden; border: 1px solid #e3dde9; box-shadow: 0 14px 34px rgba(40,20,60,.14); background: var(--night); }
+  figure img { width: 100%; display: block; }
+  figcaption { display: flex; gap: 10px; align-items: flex-start; margin-top: 8px; font-size: 8.8pt; color: var(--soft); line-height: 1.5; }
+  .cap-tag { flex: none; font: 700 7pt/1 "Plus Jakarta Sans"; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--grad); padding: 5px 8px; border-radius: 6px; margin-top: 1px; }
+  .cap-tag.news { background: linear-gradient(120deg,#0ea5e9,#14b8a6); }
+  .cap-tag.agent { background: linear-gradient(120deg,#8b5cf6,#ff3d8b); }
+  .cap-tag.money { background: linear-gradient(120deg,#f59e0b,#ff8a4c); }
+  .cap-tag.trust { background: linear-gradient(120deg,#14b8a6,#84cc16); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 10px 0; }
+  .steps li { counter-increment: s; position: relative; padding: 0 0 10px 36px; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 8px; background: var(--grad); color: #fff; font: 800 9pt/24px "Plus Jakarta Sans"; text-align: center; }
+  .steps li b { font-family: "Plus Jakarta Sans"; }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9pt; margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  th { text-align: left; font: 700 7.8pt "Plus Jakarta Sans"; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); background: var(--cream); padding: 9px 11px; }
+  td { padding: 9px 11px; border-top: 1px solid var(--line); vertical-align: top; }
+  td b { font-family: "Plus Jakarta Sans"; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font: 700 7.5pt "Plus Jakarta Sans"; }
+  .pill.ok { background: #dcfce7; color: #166534; } .pill.part { background: #fef3c7; color: #92400e; }
+
+  .flow { display: flex; align-items: stretch; gap: 6px; margin: 12px 0; }
+  .flow .node { flex: 1; border-radius: 12px; padding: 10px; color: #fff; font-size: 8.4pt; line-height: 1.4; }
+  .flow .node b { display: block; font: 800 9.5pt "Plus Jakarta Sans"; margin-bottom: 2px; }
+  .flow .arrow { align-self: center; color: var(--faint); font: 800 14pt Inter; }
+
+  .loop { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 12px 0; position: relative; }
+  .loop .box { border-radius: 14px; padding: 12px; border: 1.5px solid; background: #fff; font-size: 8.8pt; }
+  .loop .box h4 { display: flex; align-items: center; gap: 6px; }
+  .loop .box.g { border-color: #ffb48f; } .loop .box.t { border-color: #ff8fbd; } .loop .box.r { border-color: #b9a1fb; }
+  .loop .tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .loop .tools span { font: 600 7.4pt/1 "JetBrains Mono", Menlo, monospace; padding: 4px 6px; border-radius: 6px; background: #f6f1fb; color: #5b3fb3; }
+
+  .callout { border-radius: 14px; padding: 13px 16px; background: linear-gradient(120deg, rgba(255,138,76,.10), rgba(139,92,246,.10)); border: 1px solid #f0e2f2; margin: 12px 0; }
+  .callout h4 { margin-bottom: 4px; }
+  .callout p:last-child { margin: 0; }
+  .twocol { display: grid; grid-template-columns: 1.05fr .95fr; gap: 16px; align-items: start; }
+  .label { display: inline-block; padding: 1px 7px; border-radius: 6px; font: 700 7.6pt "Plus Jakarta Sans"; margin-right: 3px; }
+  .l-fact { background: #dcfce7; color: #166534; } .l-inf { background: #e0e7ff; color: #3730a3; } .l-ass { background: #fef3c7; color: #92400e; }
+  .l-unk { background: #f1f5f9; color: #475569; } .l-dis { background: #fee2e2; color: #991b1b; }
+  ul.clean { padding-left: 18px; margin: 6px 0 10px; } ul.clean li { margin-bottom: 4px; }
+  .toc { margin-top: 10px; }
+  .toc a { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px dashed var(--line); color: var(--ink); text-decoration: none; }
+  .toc .n { font: 800 11pt "Plus Jakarta Sans"; width: 26px; } .toc .t { font: 700 11pt "Plus Jakarta Sans"; } .toc .d { color: var(--faint); font-size: 9pt; margin-left: auto; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="inner">
+    <div class="brand"><div class="mark">☕</div>LocalLift</div>
+    <h1>Turning local news<br>into a café’s<br><span style="color:#ffd2b8">next good day.</span></h1>
+    <p class="sub">An AI research agent that reads the neighbourhood’s news, events and buzz, then tells a small café what’s coming, why it matters and what to do about it.</p>
+    <div class="chips"><span class="chip">Agentic AI</span><span class="chip">Live local news</span><span class="chip">Event intelligence</span><span class="chip">Midtown NYC</span></div>
+    <div class="shot-wrap"><img src="shots/s01_briefing.png" alt="LocalLift briefing home"></div>
+    <div class="meta"><span>Class project · Newsren brief</span><span>October 27, 2026</span></div>
+  </div>
+</section>
+
+<!-- ============ CONTENTS ============ -->
+<section class="page">
+  <div class="kicker">Inside</div>
+  <h2>The story in <span class="grad">seven parts</span></h2>
+  <p class="lead">This document follows one café owner through the problem, the idea, the product and the AI that does the work. Every screenshot is labelled with the capability it shows.</p>
+  <div class="toc">
+    <a><span class="n">01</span><span class="t">The problem</span><span class="d">A café that keeps finding out too late</span></a>
+    <a><span class="n">02</span><span class="t">The idea</span><span class="d">Use local news as an early-warning system</span></a>
+    <a><span class="n">03</span><span class="t">Meet LocalLift</span><span class="d">One screen that answers “what’s coming?”</span></a>
+    <a><span class="n">04</span><span class="t">The features, one by one</span><span class="d">Briefing, events, news, buzz, radar, plans, results</span></a>
+    <a><span class="n">05</span><span class="t">How it is agentic</span><span class="d">A goal, tools and a controlled process</span></a>
+    <a><span class="n">06</span><span class="t">Trust and safety</span><span class="d">Why you can believe what it says</span></a>
+    <a><span class="n">07</span><span class="t">How it meets the assignment</span><span class="d">Newsren plan, mapped feature by feature</span></a>
+  </div>
+  <div class="callout" style="margin-top:22px">
+    <h4>How to read the screenshots</h4>
+    <p class="small">Each picture has a coloured tag that names the capability it proves:
+      <span class="cap-tag news" style="display:inline-block">News</span> news intelligence,
+      <span class="cap-tag agent" style="display:inline-block">Agent</span> agentic AI,
+      <span class="cap-tag" style="display:inline-block">Events</span> event and crowd intelligence,
+      <span class="cap-tag money" style="display:inline-block">Action</span> plans and money, and
+      <span class="cap-tag trust" style="display:inline-block">Trust</span> evidence and safety.</p>
+  </div>
+  <div class="story">
+    <h4>A quick note on what’s real</h4>
+    <p class="small muted">The café, “Opening Act Café” near Penn Station and Madison Square Garden, is made up so we could show the idea end to end. Everything around it is real: the events come from Ticketmaster and NYC Parks, the news from Gothamist, Google News and GDELT, the transit alerts from the MTA, permits from NYC Open Data, and the social buzz from Bluesky and X.</p>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>Contents</span></div>
+</section>
+
+<!-- ============ 01 PROBLEM ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">1</span>The problem</div>
+  <h2>A small café that keeps <span class="grad">finding out too late</span></h2>
+  <p class="lead">Meet Maya. She runs Opening Act Café, two blocks from Madison Square Garden in Midtown Manhattan.</p>
+  <div class="story">
+    <p>Some evenings, a wave of concert-goers pours through the door an hour before a show. The line goes out the door, the pastry case is empty by 6pm, and Maya is the only one on the till. She loses sales simply because she can’t serve people fast enough.</p>
+    <p>Other days she stocks up for a crowd that never comes: the game was moved, a street was closed for a parade, or the subway line was down.</p>
+  </div>
+  <div class="quote">“Everything that affects my day is in the news somewhere. I just never see it in time, and I don’t have time to look.”</div>
+  <h3>Why this is a burning problem</h3>
+  <div class="grid2">
+    <div class="tile"><div class="ic c1">1</div><h4>The signals are scattered</h4><p>Event listings, local news, city permits, subway alerts and social posts all live in different places. Nobody has time to check ten sites every morning.</p></div>
+    <div class="tile"><div class="ic c2">2</div><h4>News doesn’t say “so what”</h4><p>A headline says “Harry Styles plays MSG.” It doesn’t say “expect about 80 extra customers between 5 and 7pm.”</p></div>
+    <div class="tile"><div class="ic c3">3</div><h4>Timing is everything</h4><p>Knowing about a crowd the morning of is too late. You need days to schedule staff, order stock and plan a special.</p></div>
+    <div class="tile"><div class="ic c4">4</div><h4>Plans change quietly</h4><p>Cancellations, time changes and transit disruptions are reported in passing, often after you’ve already prepared.</p></div>
+  </div>
+  <div class="callout">
+    <h4>The cost of not knowing</h4>
+    <p class="small">Small food businesses run on thin margins. One missed rush, or one over-prepared quiet night, can wipe out a week’s profit. Big chains have analysts for this. Independent cafés don’t.</p>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>01 · The problem</span></div>
+</section>
+
+<!-- ============ 02 IDEA ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">2</span>The idea</div>
+  <h2>Local news as an <span class="grad">early-warning system</span></h2>
+  <p class="lead">The Newsren brief asks a simple question: what if news didn’t just inform you, but told you what to do? We applied that to one person who really needs it: a café owner.</p>
+  <p>News is the earliest public signal that something will change on your street. A concert announcement, a road closure permit, a “show postponed” story, a subway service change. LocalLift reads all of it, connects it to the café, and turns it into a decision.</p>
+  <h3>From headline to action</h3>
+  <div class="flow">
+    <div class="node c1"><b>1 · Read</b>News, events, permits, transit alerts and social posts near the café</div><div class="arrow">›</div>
+    <div class="node c2"><b>2 · Connect</b>Group stories about the same thing into one “development”</div><div class="arrow">›</div>
+    <div class="node c3"><b>3 · Verify</b>Check against the official listing; flag what disagrees</div><div class="arrow">›</div>
+    <div class="node c4"><b>4 · Explain</b>Why it matters to this café: crowd, timing, distance</div><div class="arrow">›</div>
+    <div class="node c5"><b>5 · Act</b>A specific step: staff up, run a special, or change nothing</div>
+  </div>
+  <h3>How news shows up inside the product</h3>
+  <div class="grid3">
+    <div class="tile"><div class="ic c4">N</div><h4>Local news &amp; alerts</h4><p>Street events, transit changes and neighbourhood stories, each with a suggested move.</p></div>
+    <div class="tile"><div class="ic c2">S</div><h4>Story intelligence</h4><p>Many articles about one thing become one evolving story with a “what changed?” history.</p></div>
+    <div class="tile"><div class="ic c3">E</div><h4>News per event</h4><p>Each event shows only the coverage that’s actually about it, and checks it for cancellations or time changes.</p></div>
+    <div class="tile"><div class="ic c1">B</div><h4>Social buzz</h4><p>How much people are talking about an event on X and Bluesky, and whether it’s rising.</p></div>
+    <div class="tile"><div class="ic c6">Q</div><h4>Follow a question</h4><p>“Tell me if this game is called off.” The agent keeps checking the news for you.</p></div>
+    <div class="tile"><div class="ic c5">A</div><h4>Ask the news</h4><p>Ask anything about an event and get an answer built from cited sources.</p></div>
+  </div>
+  <div class="story" style="margin-top:14px">
+    <p class="small"><b>Keeping the news relevant.</b> Early on, the Harry Styles page showed articles about sneakers and Marvel films, because those stories happened to mention him. We added a rule: an article only counts if the event is in the headline, or the headline plus the text clearly talks about the show or venue. Now the news tab only shows coverage about the show.</p>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>02 · The idea</span></div>
+</section>
+
+<!-- ============ 03 MEET ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">3</span>Meet LocalLift</div>
+  <h2>One screen that answers <span class="grad">“what’s coming?”</span></h2>
+  <p class="lead">Maya opens LocalLift with her morning coffee. In under a minute she knows her week.</p>
+  <figure>
+    <div class="frame"><img src="shots/s01_briefing.png" alt=""></div>
+    <figcaption><span class="cap-tag news">News</span><span><b>The Local Briefing.</b> A live ticker of what’s happening nearby, four headline numbers for the week, and the AI research agent right at the top, ready to investigate or keep watch.</span></figcaption>
+  </figure>
+  <h3>A typical morning, in five taps</h3>
+  <ol class="steps">
+    <li><b>Read the briefing.</b> The top picks for the week and anything urgent, like a cancellation or a subway closure.</li>
+    <li><b>Open an event.</b> See the expected crowd, the distance, the relevant news and the buzz.</li>
+    <li><b>Ask the agent.</b> “Is this still on, and when will people pass the café?” It checks sources and answers with citations.</li>
+    <li><b>Plan a campaign.</b> A themed special and a step-by-step plan, with the profit worked out.</li>
+    <li><b>Check Rush Radar.</b> Which hours will be busy, and whether she needs an extra pair of hands.</li>
+  </ol>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>03 · Meet LocalLift</span></div>
+</section>
+
+<!-- ============ 04 FEATURES: shortlist + map ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>Your <span class="grad">shortlist</span> and the map</h2>
+  <p class="lead">There are over 1,700 events within reach each fortnight. Maya doesn’t need 1,700. She needs the three that matter.</p>
+  <figure>
+    <div class="frame"><img src="shots/s02_shortlist.png" alt=""></div>
+    <figcaption><span class="cap-tag">Events</span><span><b>Top picks this week, on a live map.</b> Each event is scored on how close it is, how soon it is, how big the crowd is and whether it fits the café’s opening hours. The map pins the café in orange and the best opportunities in pink.</span></figcaption>
+  </figure>
+  <div class="grid2">
+    <div class="tile"><h4>How the ranking works</h4><p>A plain, explainable score: distance, timing, crowd size, demand evidence and café fit. No black box: the same inputs always give the same rank.</p></div>
+    <div class="tile"><h4>Crowd estimates, never “unknown”</h4><p>A published figure if there is one; otherwise the venue’s capacity (from Wikidata) times a typical sell-through; otherwise a ballpark for that type of event. Always labelled as an estimate.</p></div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 04 event detail ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>Inside an event: <span class="grad">why it matters</span></h2>
+  <p class="lead">Tapping an event opens its full picture: the crowd, the timing, what the news says and exactly what to do.</p>
+  <div class="side">
+    <figure>
+      <div class="frame"><img src="shots/s03_event.png" alt=""></div>
+      <figcaption><span class="cap-tag">Events</span><span><b>Event overview</b> for Harry Styles at Madison Square Garden, 0.12 miles away.</span></figcaption>
+    </figure>
+    <div>
+      <h3 style="margin-top:0">How to read this panel</h3>
+      <ul class="pointlist">
+        <li><b>Fit score (92)</b>How well this event suits this café: close by, during opening hours, matches the menu, strong demand, enough time to prepare, within budget.</li>
+        <li><b>Biggest unknown</b>The one thing we couldn’t confirm. Here: real attendance isn’t published, so the crowd is estimated.</li>
+        <li><b>Expected crowd: about 16,000</b>The arena holds 20,000 (from Wikidata), and a typical show fills 60 to 95% of seats. Always marked “EST”.</li>
+        <li><b>Buzz: 105 posts</b>Live chatter on Bluesky and X, with a trend for each.</li>
+        <li><b>Related news</b>Stories linked to this event, labelled with how well they’re confirmed.</li>
+        <li><b>Official listing</b>A link to the source, and when we last checked it.</li>
+      </ul>
+      <div class="callout" style="margin-top:14px"><h4>“#3 pick this week”</h4><p class="small">The shortlist ranks the next 7 days. A separate overall rank covers 14 days and gives extra credit to events further out, because they leave more time to prepare.</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 04 news + buzz ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>The news and the <span class="grad">buzz</span> around each event</h2>
+  <div class="grid2" style="align-items:start">
+    <figure>
+      <div class="frame"><img src="shots/s04_event_news.png" alt=""></div>
+      <figcaption><span class="cap-tag news">News</span><span><b>Event news.</b> Only coverage that is really about this show, each item linked to its source and dated.</span></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><img src="shots/s05_buzz.png" alt=""></div>
+      <figcaption><span class="cap-tag news">News</span><span><b>Social buzz.</b> Post counts on X and Bluesky shown separately, with a trend that compares today with yesterday.</span></figcaption>
+    </figure>
+  </div>
+  <div class="callout">
+    <h4>Why buzz matters</h4>
+    <p class="small">A sold-out show and a half-empty one look the same on a ticket listing. Rising chatter is an early hint that more fans will show up, or that something has changed. X is checked once a day for the top two events, under a $5 a month cap that Maya approved. Bluesky is free and checked more often.</p>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 04 local news + story intelligence ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>Local news that <span class="grad">tells you what to do</span></h2>
+  <p class="lead">Not every important change is a concert. Street fairs, parades, closures and subway work matter too.</p>
+  <figure>
+    <div class="frame"><img src="shots/s06_news.png" alt=""></div>
+    <figcaption><span class="cap-tag news">News</span><span><b>Local news &amp; alerts.</b> Stories from Gothamist, Google News, NYC permits and MTA alerts, grouped into developments. Each card says what happened, why it matters to the café and a suggested move.</span></figcaption>
+  </figure>
+  <div class="side">
+    <figure>
+      <div class="frame crop" style="max-height:118mm"><img src="shots/s07_development.png" alt=""></div>
+      <figcaption><span class="cap-tag news">News</span><span><b>One development, opened.</b> A city permit for a street event nearby, turned into a $0 promo.</span></figcaption>
+    </figure>
+    <div>
+      <h3 style="margin-top:0">From a permit to a plan</h3>
+      <p class="small">This one started as a dry city record: a curb-lane closure for a street event on West 23rd Street. LocalLift noticed it’s close by, happens while the café is open, and could bring people past the door.</p>
+      <ul class="pointlist">
+        <li><b>Why it matters to you</b>Written for this café, not for a general reader.</li>
+        <li><b>What to do</b>A specific move sized to the opportunity. Here, a quick promo, because it’s today and small.</li>
+        <li><b>Free promo kit</b>Ready-to-copy text for a sidewalk sign and an Instagram story. Costs $0, takes 5 minutes. Nothing is posted for you.</li>
+        <li><b>Evidence and history</b>Every source behind the story, and a version history of what changed since Maya last looked.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 04 radar ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>Rush Radar: <span class="grad">when to expect the wave</span></h2>
+  <p class="lead">A seven-day, hour-by-hour view of extra walk-ins from every nearby event, stacked on top of normal business.</p>
+  <figure>
+    <div class="frame"><img src="shots/s08_radar.png" alt=""></div>
+    <figcaption><span class="cap-tag">Events</span><span><b>Rush Radar.</b> Each column is an hour of the day (4pm, 5pm…). The brighter the cell, the more extra customers. A “!” means the café would be over its limit of orders per hour.</span></figcaption>
+  </figure>
+  <div class="twocol">
+    <div>
+      <h3>How it’s worked out</h3>
+      <p class="small">Crowd size × the share of people who pass the café (based on distance) × the share who come in. The walk-ins are spread over the two hours before the event starts, because that’s when people grab a coffee on the way.</p>
+      <p class="small">Tap a day and LocalLift writes a short <b>staff briefing</b>: which events are on, when it gets busy, what to prep, and whether an extra staff hour would pay off.</p>
+    </div>
+    <div style="margin-top:18px">
+      <div class="memo"><span class="t">Staff briefing · Wednesday Oct 28</span>Harry Styles at MSG, 8:00 PM (~16,000 attending, ~160 likely walk-ins)
+
+6pm: ~73 orders expected (normal ~8), over our 48/h limit
+7pm: ~104 orders expected, over our limit by ~56
+
+Prep: pre-wrap grab-and-go; cold brew pre-poured for the peak.
+Owner decision: ~6 extra staff hours (≈$150), or grab-and-go only at peak.
+Script: “Heading to the show? We’re ready in two minutes.”</div>
+      <figcaption><span class="cap-tag money">Action</span><span>The real staff briefing LocalLift wrote for Wednesday, one tap to copy.</span></figcaption>
+    </div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 04 campaign + results ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>From insight to <span class="grad">a plan that pays</span></h2>
+  <figure>
+    <div class="frame"><img src="shots/s10_campaign.png" alt=""></div>
+    <figcaption><span class="cap-tag money">Action</span><span><b>Campaign plan.</b> A themed special built from the café’s real menu (here, the “Broadway Blue Brew” at $7.75), five steps from “assess and prepare” to “learn and retain”, each with dated tasks.</span></figcaption>
+  </figure>
+  <div class="grid3" style="margin-top:12px">
+    <div class="tile"><div class="ic c1">1</div><h4>Themed, not generic</h4><p>The special nods to the event using real menu items. No artist names, no lyrics, add-ons under $0.40.</p></div>
+    <div class="tile"><div class="ic c2">2</div><h4>Ready-made copy</h4><p>Sign text, social captions and what staff should say, all editable.</p></div>
+    <div class="tile"><div class="ic c3">3</div><h4>Owner in control</h4><p>Draft, ready, running, done. Nothing is posted or sent automatically.</p></div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker"><span class="num">4</span>The features</div>
+  <h2>What could you <span class="grad">earn?</span></h2>
+  <p class="lead">Every plan comes with honest numbers: three scenarios, worked out by code, not by the AI.</p>
+  <figure>
+    <div class="frame"><img src="shots/s11_results.png" alt=""></div>
+    <figcaption><span class="cap-tag money">Action</span><span><b>Results.</b> Slow, expected and busy scenarios after food, fees and campaign costs. Here the café would sell out its capacity, so LocalLift says so and lets Maya test “what if we could serve more?”. After the event she records what really happened.</span></figcaption>
+  </figure>
+  <div class="callout"><h4>Why “expected” and “busy” can match</h4><p class="small">If more people want coffee than the café can make in an hour, the café’s limit sets the number, not the crowd. Showing that honestly stops an owner from over-spending on promotion they can’t serve.</p></div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
+</section>
+
+<!-- ============ 05 AGENTIC ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">5</span>How it is agentic</div>
+  <h2>Not a chatbot. <span class="grad">A researcher with a job.</span></h2>
+  <p class="lead">The brief is clear: calling an AI to write a summary is not agentic. An agent needs a goal, the right tools and a controlled way of gathering evidence. Here is how LocalLift does each.</p>
+  <div class="loop">
+    <div class="box g"><h4>🎯 A clear goal</h4>Every run has one job: investigate an event, answer Maya’s question, judge a news development, scan the week, or keep watch on a question.</div>
+    <div class="box t"><h4>🧰 Real tools</h4>It decides which of 14 tools to use, and in what order:
+      <div class="tools"><span>discoverEvents</span><span>searchNews</span><span>searchSocial</span><span>fetchApprovedSource</span><span>getEventHistory</span><span>getDevelopmentHistory</span><span>calculateDistance</span><span>rankOpportunities</span><span>calculateDemand…</span><span>recordClaim</span><span>savePlanDraft</span><span>saveBriefingDraft</span><span>createWatch</span><span>getBusinessProfile</span></div></div>
+    <div class="box r"><h4>🛡️ A controlled process</h4>At most 8 look-ups, 60 seconds and 12 steps per run. Every tool call is checked. Only approved websites. Numbers come from code, not from the AI’s imagination.</div>
+  </div>
+  <h3>What a run looks like</h3>
+  <div class="flow">
+    <div class="node c3"><b>Plan</b>“To answer this I need the listing and the latest news.”</div><div class="arrow">›</div>
+    <div class="node c2"><b>Act</b>Calls tools: listing, news, buzz, official page</div><div class="arrow">›</div>
+    <div class="node c1"><b>Observe</b>Reads the results; notices gaps or conflicts</div><div class="arrow">›</div>
+    <div class="node c6"><b>Adapt</b>A source refuses access? Tries the official one instead</div><div class="arrow">›</div>
+    <div class="node c5"><b>Report</b>Labelled answer with sources and what’s still unknown</div>
+  </div>
+  <figure style="width:76%;margin-left:auto;margin-right:auto">
+    <div class="frame"><img src="shots/s12_agent_progress.png" alt=""></div>
+    <figcaption><span class="cap-tag agent">Agent</span><span><b>The agent at work, live.</b> While it runs, Maya sees each step it has finished and how long it took: it is choosing tools, not just writing text.</span></figcaption>
+  </figure>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>05 · Agentic</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker"><span class="num">5</span>How it is agentic</div>
+  <h2>Answers you can <span class="grad">check</span></h2>
+  <div class="side">
+    <figure>
+      <div class="frame crop" style="max-height:150mm"><img src="shots/s13_agent_answer.png" alt=""></div>
+      <figcaption><span class="cap-tag agent">Agent</span><span><b>A grounded answer</b>, about 5 seconds after asking.</span></figcaption>
+    </figure>
+    <div>
+      <h3 style="margin-top:0">What makes it trustworthy</h3>
+      <ul class="pointlist">
+        <li><b>A direct answer first</b>“Yes, it’s on. Expect the crowd from about 6pm.”</li>
+        <li><b>Every line is labelled</b>Sourced fact, inference, creative suggestion, owner assumption or unknown.</li>
+        <li><b>Sources are cited</b>The Ticketmaster listing ID, the official MSG page and the Wikidata venue record.</li>
+        <li><b>It says what would change its mind</b>Here: an official cancellation or reschedule.</li>
+        <li><b>The steps are on record</b>“Steps the agent took” shows every tool call, so anyone can audit it.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <h4>It adapts when things go wrong</h4>
+    <p class="small">In one real run, Ticketmaster’s page refused access. Instead of giving up or guessing, the agent switched to Madison Square Garden’s official page, confirmed the date, recorded the claim and saved a plan. In another, the news service was rate-limited; the agent said so plainly and answered from what it could verify.</p>
+  </div>
+  <p class="small"><b>Every sentence is labelled:</b>
+    <span class="label l-fact">Fact</span> from a source,
+    <span class="label l-inf">Inference</span> reasoned from facts,
+    <span class="label l-ass">Assumption</span> the owner’s own setting,
+    <span class="label l-unk">Unknown</span> couldn’t be verified,
+    <span class="label l-dis">Disputed</span> sources disagree.</p>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>05 · Agentic</span></div>
+</section>
+
+<section class="page">
+  <div class="kicker"><span class="num">5</span>How it is agentic</div>
+  <h2>“Follow a question”: <span class="grad">the agent keeps watch</span></h2>
+  <p class="lead">This is the feature that makes LocalLift feel like a colleague. Maya writes a question once, and the agent keeps checking the news for her.</p>
+  <figure>
+    <div class="frame"><img src="shots/s14_follow.png" alt=""></div>
+    <figcaption><span class="cap-tag agent">Agent</span><span><b>Your research agent.</b> Followed questions with their latest verdict. Each one can be opened, re-checked now or stopped.</span></figcaption>
+  </figure>
+  <ol class="steps">
+    <li><b>Maya asks</b> “Let me know if the Rangers game is called off.” She can type it on the Briefing page or in an event’s Ask tab.</li>
+    <li><b>The agent checks right away</b> using the listing, the news and the event’s history, then gives a verdict: <i>met</i> or <i>not met</i>, with reasons.</li>
+    <li><b>It re-checks every 6 hours</b> on its own, through the background worker.</li>
+    <li><b>It only alerts when the answer changes</b> from “not met” to “met”. Repeated or opinion articles don’t set it off, so no alert fatigue.</li>
+  </ol>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>05 · Agentic</span></div>
+</section>
+
+<!-- ============ 06 TRUST ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">6</span>Trust and safety</div>
+  <h2>Why you can <span class="grad">believe it</span></h2>
+  <p class="lead">An AI that gives business advice has to be honest about what it knows. These rules are built into the product, not left to chance.</p>
+  <div class="side">
+  <figure>
+    <div class="frame crop" style="max-height:178mm"><img src="shots/s15_sources.png" alt=""></div>
+    <figcaption><span class="cap-tag trust">Trust</span><span><b>Data sources.</b> Live health of every source, when it last worked, and the AI model in use with its daily cost limit.</span></figcaption>
+  </figure>
+  <div class="stack">
+    <div class="tile"><div class="ic c5">✓</div><h4>Every number has a source</h4><p>Crowd figures, distances and money come from code and cited data. If a number is an estimate, it says “EST” and explains the method.</p></div>
+    <div class="tile"><div class="ic c4">⚖</div><h4>Disagreement is shown</h4><p>If two sources disagree, the claim is marked “disputed”, not quietly picked. An unconfirmed rumour leads to an explicit “no change”.</p></div>
+    <div class="tile"><div class="ic c3">🔒</div><h4>Only approved sources</h4><p>Official APIs, an allow-list of websites and robots.txt respected. If a page blocks us, we report it; we don’t get around it.</p></div>
+    <div class="tile"><div class="ic c1">✋</div><h4>A human decides</h4><p>Nothing is posted, sent or bought by the app. Plans wait for Maya’s review. Paid data runs only under a cap she set.</p></div>
+  </div>
+  </div>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>06 · Trust</span></div>
+</section>
+
+<!-- ============ 07 ASSIGNMENT ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">7</span>How it meets the assignment</div>
+  <h2>The Newsren plan, <span class="grad">mapped</span></h2>
+  <p class="lead">The Newsren plan proposes six features and one rule that isn’t optional: real agentic capability. LocalLift takes that blueprint and applies it to one specific reader.</p>
+  <table>
+    <tr><th style="width:30%">Newsren feature</th><th>In LocalLift</th><th style="width:16%">Status</th></tr>
+    <tr><td><b>My Newsren</b><br><span class="muted small">personal research agent</span></td><td>The Local Briefing for this café’s location, hours, menu and budget, plus the research agent (Investigate and Ask AI)</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Story Intelligence</b></td><td>Developments group news, official records and listing changes into one evolving story with a “what changed?” history</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>News-to-Learning</b><br><span class="muted small">audience adaptation</span></td><td>The same evidence rewritten for the owner (briefing), the staff (Rush Radar briefing) and customers (sign and social copy)</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Industry Impact</b></td><td>“Why it matters to Opening Act”: impact on hours, capacity and demand, plus profit scenarios worked out by code</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Evidence &amp; Bias Inspection</b></td><td>Source types, claim labels, checks against the official listing, disputed claims kept, a news relevance rule</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Follow This Story</b></td><td>Follow a question: the agent re-checks every 6 hours and alerts only when the verdict flips</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Agentic core</b></td><td>A goal per run, 14 typed tools, budgets and validation, plans and adapts, reports what it couldn’t verify</td><td><span class="pill ok">Built</span></td></tr>
+    <tr><td><b>Briefing delivery</b></td><td>Opt-in email delivery of briefings, with approval first</td><td><span class="pill part">Next step</span></td></tr>
+  </table>
+  <h3>What we’d build next</h3>
+  <ul class="clean small">
+    <li>Email or text delivery of the morning briefing, with the owner’s approval.</li>
+    <li>Learning from real outcomes: compare predicted walk-ins with recorded sales to tune the estimates.</li>
+    <li>More neighbourhoods and business types: the same engine works for a bar near a stadium or a shop near a theatre.</li>
+  </ul>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>07 · Assignment</span></div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="page cover">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="inner" style="justify-content:center">
+    <div class="brand"><div class="mark">☕</div>LocalLift</div>
+    <h1 style="margin-top:22mm;font-size:36pt">The news already knew.<br><span style="color:#ffd2b8">Now the café does too.</span></h1>
+    <p class="sub">LocalLift reads the neighbourhood so a small business doesn’t have to. It finds what’s coming, checks it, explains why it matters, and suggests one clear next step, while a person keeps the final say.</p>
+    <div class="grid3" style="margin-top:20mm;color:#fff">
+      <div><div style="font:800 26pt 'Plus Jakarta Sans'">9</div><div class="small" style="opacity:.75">live data sources</div></div>
+      <div><div style="font:800 26pt 'Plus Jakarta Sans'">14</div><div class="small" style="opacity:.75">agent tools</div></div>
+      <div><div style="font:800 26pt 'Plus Jakarta Sans'">~5s</div><div class="small" style="opacity:.75">typical agent answer</div></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

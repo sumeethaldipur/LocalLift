@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LocalLift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="/static/styles.css?v=31">
+  <link rel="stylesheet" href="/static/components.css?v=33">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ff8a4c"/><stop offset="50%" stop-color="#ff3d8b"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark"><i data-lucide="coffee" class="icon"></i></div>
+        <div>
+          <div class="brand-name">LocalLift</div>
+          <div class="brand-sub" id="bizName">Opening Act Café</div>
+        </div>
+      </div>
+      <nav class="seg" role="tablist" aria-label="Main" id="mainSeg"><span class="seg-pill" aria-hidden="true"></span>
+        <button role="tab" data-tab="briefing" aria-selected="true"><i data-lucide="newspaper" class="icon icon-sm"></i>Briefing</button>
+        <button role="tab" data-tab="campaigns" aria-selected="false"><i data-lucide="megaphone" class="icon icon-sm"></i>Campaigns</button>
+        <button role="tab" data-tab="results" aria-selected="false"><i data-lucide="line-chart" class="icon icon-sm"></i>Results</button>
+      </nav>
+      <div class="top-actions">
+        <span class="agent-pill" id="agentPill"><span class="pulse"></span><span class="lbl">AI agent</span></span>
+        <button class="icon-btn" id="btnSources" title="Data sources" aria-label="Data sources"><i data-lucide="activity" class="icon"></i></button>
+        <button class="icon-btn" id="btnSettings" title="Café profile" aria-label="Café profile"><i data-lucide="store" class="icon"></i></button>
+        <button class="icon-btn" id="btnBell" title="Alerts" aria-label="Alerts"><i data-lucide="bell" class="icon"></i><span class="dot-badge" id="bellCount" hidden>0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- BRIEFING -->
+    <section id="view-briefing" class="view" role="tabpanel">
+      <div class="hero">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span><span id="today">Today</span> · Live</div>
+          <h1>What’s happening<br><span class="grad-text">around your café</span></h1>
+          <p>A focused briefing for Opening Act Café. Know what’s changing, why it matters, and what to do next.</p>
+        </div>
+        <div class="hero-right">
+          <span class="updated" id="updated"></span>
+          <button class="btn" id="btnRefresh"><i data-lucide="rotate-cw" class="icon icon-sm"></i>Refresh</button>
+        </div>
+      </div>
+      <div class="ticker glass" id="ticker" hidden><div class="ticker-label"><i data-lucide="zap" class="icon icon-sm"></i><span>LIVE NEAR YOU</span></div>
+        <div class="ticker-track"><div class="ticker-move" id="tickerMove"></div></div></div>
+      <div class="stats" id="stats">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+      <div id="urgent"></div>
+      <div class="research-strip" id="researchStrip" style="flex-wrap:wrap">
+        <div class="research-symbol"><i data-lucide="bot" class="icon icon-lg"></i></div>
+        <div class="research-copy"><div class="overline">Your research agent · Follow a question</div><h3>Ask it to keep watch for you.</h3>
+          <p>Type a question and the condition you care about — the agent re-checks real sources on a schedule and alerts you only when it’s met.</p></div>
+        <button class="btn" id="btnResearchLead"><i data-lucide="search" class="icon icon-sm"></i>Investigate top pick</button>
+        <form class="ask-watch" id="watchForm">
+          <input id="watchQ" maxlength="300" placeholder="e.g. Tell me if the Harry Styles show time changes or Penn Station service is disrupted that day" aria-label="Question to follow">
+          <button class="btn primary"><i data-lucide="radar" class="icon icon-sm"></i>Follow this</button>
+        </form>
+        <div class="watch-list" id="watchList" style="width:100%"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <h2><span class="h-icon"><i data-lucide="sparkles" class="icon"></i></span>Your shortlist this week</h2>
+          <span class="hint">Ranked by proximity, timing, demand evidence, and café fit</span>
+        </div>
+        <div class="opp-layout">
+          <div>
+            <div class="opp-list" id="topCards"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+            <div class="all-toggle">
+              <button class="btn ghost" id="toggleAll"><i data-lucide="list" class="icon icon-sm"></i><span>Show all nearby events</span></button>
+              <div class="list glass" id="allBox" hidden>
+                <div class="list-filters">
+                  <div class="seg" id="winSeg" aria-label="Time window">
+                    <button data-win="7" aria-selected="true">Next 7 days</button>
+                    <button data-win="14" aria-selected="false">Next 14 days</button>
+                  </div>
+                  <input id="eventSearch" type="search" placeholder="Find an event or venue" aria-label="Find an event or venue"><span class="muted small" id="allCount"></span>
+                </div>
+                <div class="list-scroll" id="allEvents"></div>
+              </div>
+            </div>
+          </div>
+          <div class="map-card glass">
+            <div class="map-toolbar"><div><div class="overline">NEIGHBORHOOD EXPLORER</div><strong>See the opportunity nearby</strong></div><button class="icon-btn" id="mapReset" title="Recenter map" aria-label="Recenter map"><i data-lucide="locate-fixed" class="icon"></i></button></div>
+            <div class="map-switch" role="group" aria-label="Map events"><button data-map-mode="top" aria-pressed="true">Top picks</button><button data-map-mode="all" aria-pressed="false">All venues</button><span id="mapCount"></span></div>
+            <div id="map" role="region" aria-label="Map of events around the café"></div>
+            <div id="mapFallback" class="map-fallback" hidden>Map tiles didn’t load — every event is still in the list.</div>
+            <div class="map-legend">
+              <span><span class="lg-dot" style="background:var(--orange)"></span>Your café</span>
+              <span><span class="lg-dot" style="background:var(--pink)"></span>Top picks</span>
+              <span><span class="lg-dot" style="background:#8b8aa0"></span>Other events</span>
+              <span>Pins group events at the same venue</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head">
+          <h2><span class="h-icon"><i data-lucide="activity" class="icon"></i></span>Rush Radar</h2>
+          <span class="hint">Expected extra walk-ins from nearby events, hour by hour for the next 7 days — click a day for staffing and a staff briefing</span>
+        </div>
+        <div class="radar glass" id="radar"><div class="skeleton" style="height:220px"></div></div>
+      </div>
+      <div class="section">
+        <div class="section-head">
+          <h2><span class="h-icon"><i data-lucide="radio" class="icon"></i></span>Local news &amp; alerts <span class="count" id="newsCount">0</span></h2>
+          <span class="hint">Street events, transit changes and local stories near you — with a suggested move for each</span>
+        </div>
+        <div id="devCards" class="news-grid"><div class="skeleton"></div><div class="skeleton"></div></div>
+        <div class="more-link" id="moreNews"></div>
+      </div>
+
+    </section>
+
+    <!-- CAMPAIGNS -->
+    <section id="view-campaigns" class="view" role="tabpanel" hidden>
+      <div class="hero"><div><div class="eyebrow"><i data-lucide="megaphone" class="icon icon-sm"></i>Campaigns</div><h1>Your <span class="grad-text">marketing plans</span></h1>
+        <p>Step-by-step plans for each opportunity. Nothing gets posted or sent — you stay in control.</p></div></div>
+      <div class="camp-layout">
+        <div class="camp-list" id="planList"></div>
+        <div id="planEditor"></div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="view-results" class="view" role="tabpanel" hidden>
+      <div class="hero"><div><div class="eyebrow"><i data-lucide="line-chart" class="icon icon-sm"></i>Results</div><h1>What could you <span class="grad-text">earn?</span></h1>
+        <p>Extra money left after food, fees and campaign costs — three scenarios, not promises.</p></div>
+        <div class="hero-right"><select id="resPlan" aria-label="Campaign"></select></div></div>
+      <div class="results-layout">
+        <div>
+          <div class="scen" id="scen"></div>
+          <div class="card glass" style="margin-top:18px">
+            <h3>Can the café handle it?</h3>
+            <div class="card-sub">Orders per hour during the event window, including normal business</div>
+            <div id="capacity"></div>
+            <div class="capacity-lab"><div class="overline">EXPLORE THE UPSIDE</div><h3>What if you could serve more?</h3><p class="small muted">Test a faster service setup. Capacity is your assumption; extra staff costs are deducted. This does not change your saved plan.</p>
+              <form id="whatIfForm"><div class="form-grid"><label class="field">Orders per hour<input id="whatIfCapacity" type="number" min="1" max="500" step="1" value="60" required></label><label class="field">Additional staff hours<input id="whatIfLabor" type="number" min="0" max="24" step="0.5" value="2" required></label></div><button class="btn sm" type="submit">Compare scenarios <i data-lucide="arrow-right" class="icon icon-sm"></i></button></form><div id="whatIfOut" role="status"></div></div>
+            <details class="adv">
+              <summary><i data-lucide="sliders-horizontal" class="icon icon-sm"></i>Adjust assumptions</summary>
+              <form id="projForm"></form>
+            </details>
+          </div>
+        </div>
+        <div class="card glass">
+          <h3>Record what happened</h3>
+          <div class="card-sub">After the event, log the real numbers.</div>
+          <form id="outcomeForm" style="display:flex;flex-direction:column;gap:14px">
+            <label class="field">Campaign <select name="plan_id" id="outPlan"></select></label>
+            <div class="form-grid">
+              <label class="field">Redemptions <input name="redemptions" type="number" min="0" step="1" required placeholder="0"></label>
+              <label class="field">Sales ($) <input name="sales" type="number" min="0" step="0.01" required placeholder="0.00"></label>
+            </div>
+            <label class="field">Campaign costs ($) <input name="actual_costs" type="number" min="0" step="0.01" required placeholder="0.00"></label>
+            <label class="field">What did you learn? <textarea name="notes" rows="3" maxlength="2000" placeholder="e.g. Queue peaked 45 min before doors"></textarea></label>
+            <button class="btn primary" type="submit" style="align-self:flex-start"><i data-lucide="check" class="icon icon-sm"></i>Save outcome</button>
+            <p class="form-msg" id="outMsg" role="status"></p>
+          </form>
+          <div id="outcomes"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+    <div class="drawer-head">
+      <div class="drawer-head-top"><h2 id="drawerTitle"></h2>
+        <button class="icon-btn" id="drawerClose" aria-label="Close"><i data-lucide="x" class="icon"></i></button></div>
+      <div id="drawerHeadExtra"></div>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <script src="/static/app.js?v=35"></script>
+</body>
+</html>
