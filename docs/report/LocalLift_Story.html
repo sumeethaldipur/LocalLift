@@ -47,7 +47,7 @@
   .cover .sub { font: 500 14pt/1.5 Inter; color: rgba(255,255,255,.82); margin-top: 16px; max-width: 140mm; }
   .cover .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; margin-bottom: 12mm; }
   .cover .chip { padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); font: 600 8.5pt Inter; }
-  .cover .shot-wrap { margin-top: auto; flex: none; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 30px 80px rgba(0,0,0,.5); max-height: 92mm; }
+  .cover .shot-wrap { margin-top: auto; flex: none; max-height: 66mm !important; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 30px 80px rgba(0,0,0,.5); max-height: 92mm; }
   .cover .shot-wrap img { width: 100%; display: block; }
   .cover .meta { display: flex; justify-content: space-between; margin-top: 12mm; font: 600 8pt "Plus Jakarta Sans"; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.6); }
 
@@ -118,12 +118,19 @@
   .l-unk { background: #f1f5f9; color: #475569; } .l-dis { background: #fee2e2; color: #991b1b; }
   ul.clean { padding-left: 18px; margin: 6px 0 10px; } ul.clean li { margin-bottom: 4px; }
   .toc { margin-top: 10px; }
+  .author { margin-top: 12mm; padding-left: 14px; border-left: 4px solid #ffb48f; }
+  .author .who { font: 800 22pt/1.1 "Plus Jakarta Sans"; letter-spacing: -.01em; }
+  .author .course { font: 600 13pt/1.4 Inter; color: rgba(255,255,255,.85); margin-top: 4px; }
+  .links.big { margin-top: 8mm; }
+  .links.big .lnk { padding: 14px 16px; }
+  .links.big .lv { font-size: 11pt; white-space: nowrap; word-break: normal; }
+  .links.big { margin-bottom: 9mm; }
   .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .lnk { display: block; text-decoration: none; border-radius: 14px; padding: 12px 14px; color: #fff; background: var(--grad); }
   .lnk .lk { display: block; font: 700 7.5pt "Plus Jakarta Sans"; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
   .lnk .lv { display: block; font: 700 10.5pt "Plus Jakarta Sans"; margin-top: 3px; word-break: break-all; }
   .lnk.dark { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); }
-  .stack-table td { padding: 7px 11px; }
+  .stack-table td { padding: 5.5px 11px; }
   .stack-table td:first-child { width: 24%; }
   .stack-table td:nth-child(2) { width: 34%; }
   .tag { display: inline-block; font: 600 7.6pt Inter; padding: 2px 7px; border-radius: 6px; background: #f6f1fb; color: #5b3fb3; margin: 1px 2px 1px 0; }
@@ -138,47 +145,19 @@
   <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
   <div class="inner">
     <div class="brand"><div class="mark">☕</div>LocalLift</div>
-    <h1>Turning local news<br>into a café’s<br><span style="color:#ffd2b8">next good day.</span></h1>
+    <h1 style="margin-top:20mm;font-size:40pt">Turning local news<br>into a café’s<br><span style="color:#ffd2b8">next good day.</span></h1>
     <p class="sub">An AI research agent that reads the neighbourhood’s news, events and buzz, then tells a small café what’s coming, why it matters and what to do about it.</p>
-    <div class="chips"><span class="chip">Agentic AI</span><span class="chip">Live local news</span><span class="chip">Event intelligence</span><span class="chip">Midtown NYC</span></div>
+    <div class="author">
+      <div class="who">Sumeet Haldipur</div>
+      <div class="course">Software Engineering Management · Fall 2026</div>
+    </div>
+    <div class="links big">
+      <a class="lnk" href="https://locallift-pied-mu.vercel.app"><span class="lk">Live prototype · Vercel</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
+      <a class="lnk dark" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Source code · GitHub</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
+    </div>
     <div class="shot-wrap"><img src="shots/s01_briefing.png" alt="LocalLift briefing home"></div>
-    <div class="meta"><span>Sumeet Haldipur · Software Engineering Management · Fall 2026</span><span>October 27, 2026</span></div>
+    <div class="meta"><span>Project report · Newsren brief</span><span>October 27, 2026</span></div>
   </div>
-</section>
-
-<!-- ============ CONTENTS ============ -->
-<section class="page">
-  <div class="kicker">Inside</div>
-  <h2>The story in <span class="grad">eight parts</span></h2>
-  <p class="lead">This document follows one café owner through the problem, the idea, the product and the AI that does the work. Every screenshot is labelled with the capability it shows.</p>
-  <div class="toc">
-    <a><span class="n">01</span><span class="t">The problem</span><span class="d">A café that keeps finding out too late</span></a>
-    <a><span class="n">02</span><span class="t">The idea</span><span class="d">Use local news as an early-warning system</span></a>
-    <a><span class="n">03</span><span class="t">Meet LocalLift</span><span class="d">One screen that answers “what’s coming?”</span></a>
-    <a><span class="n">04</span><span class="t">The features, one by one</span><span class="d">Briefing, events, news, buzz, radar, plans, results</span></a>
-    <a><span class="n">05</span><span class="t">How it is agentic</span><span class="d">A goal, tools and a controlled process</span></a>
-    <a><span class="n">06</span><span class="t">Trust and safety</span><span class="d">Why you can believe what it says</span></a>
-    <a><span class="n">07</span><span class="t">How it meets the assignment</span><span class="d">Newsren plan, mapped feature by feature</span></a>
-    <a><span class="n">08</span><span class="t">How it’s built</span><span class="d">Tech stack, code and live prototype</span></a>
-  </div>
-  <div class="links" style="margin-top:16px">
-    <a class="lnk" href="https://locallift-pied-mu.vercel.app"><span class="lk">Live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
-    <a class="lnk" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Source code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
-  </div>
-  <div class="callout" style="margin-top:22px">
-    <h4>How to read the screenshots</h4>
-    <p class="small">Each picture has a coloured tag that names the capability it proves:
-      <span class="cap-tag news" style="display:inline-block">News</span> news intelligence,
-      <span class="cap-tag agent" style="display:inline-block">Agent</span> agentic AI,
-      <span class="cap-tag" style="display:inline-block">Events</span> event and crowd intelligence,
-      <span class="cap-tag money" style="display:inline-block">Action</span> plans and money, and
-      <span class="cap-tag trust" style="display:inline-block">Trust</span> evidence and safety.</p>
-  </div>
-  <div class="story">
-    <h4>A quick note on what’s real</h4>
-    <p class="small muted">The café, “Opening Act Café” near Penn Station and Madison Square Garden, is made up so we could show the idea end to end. Everything around it is real: the events come from Ticketmaster and NYC Parks, the news from Gothamist, Google News and GDELT, the transit alerts from the MTA, permits from NYC Open Data, and the social buzz from Bluesky and X.</p>
-  </div>
-  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>Contents</span></div>
 </section>
 
 <!-- ============ 01 PROBLEM ============ -->
@@ -202,6 +181,7 @@
     <h4>The cost of not knowing</h4>
     <p class="small">Small food businesses run on thin margins. One missed rush, or one over-prepared quiet night, can wipe out a week’s profit. Big chains have analysts for this. Independent cafés don’t.</p>
   </div>
+  <p class="small muted" style="margin-top:10px"><b>What’s real here:</b> the café is made up so we could show the idea end to end. Everything around it is real: events from Ticketmaster and NYC Parks, news from Gothamist, Google News and GDELT, MTA transit alerts, NYC street permits, and social buzz from Bluesky and X.</p>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>01 · The problem</span></div>
 </section>
 
@@ -238,36 +218,26 @@
 <section class="page">
   <div class="kicker"><span class="num">3</span>Meet LocalLift</div>
   <h2>One screen that answers <span class="grad">“what’s coming?”</span></h2>
-  <p class="lead">Maya opens LocalLift with her morning coffee. In under a minute she knows her week.</p>
+  <p class="lead">Over 1,700 events happen within two miles every fortnight. Maya doesn’t need 1,700. She needs the three that matter, and she gets them with her morning coffee.</p>
   <figure>
-    <div class="frame"><img src="shots/s01_briefing.png" alt=""></div>
-    <figcaption><span class="cap-tag news">News</span><span><b>The Local Briefing.</b> A live ticker of what’s happening nearby, four headline numbers for the week, and the AI research agent right at the top, ready to investigate or keep watch.</span></figcaption>
+    <div class="frame"><img src="shots/s02_shortlist.png" alt=""></div>
+    <figcaption><span class="cap-tag">Events</span><span><b>Top picks this week, on a live map.</b> Each event gets a plain, explainable score for distance, timing, crowd size, demand and fit with the café’s hours. The café is pinned in orange, the best opportunities in pink.</span></figcaption>
   </figure>
   <h3>A typical morning, in five taps</h3>
   <ol class="steps">
-    <li><b>Read the briefing.</b> The top picks for the week and anything urgent, like a cancellation or a subway closure.</li>
-    <li><b>Open an event.</b> See the expected crowd, the distance, the relevant news and the buzz.</li>
-    <li><b>Ask the agent.</b> “Is this still on, and when will people pass the café?” It checks sources and answers with citations.</li>
-    <li><b>Plan a campaign.</b> A themed special and a step-by-step plan, with the profit worked out.</li>
-    <li><b>Check Rush Radar.</b> Which hours will be busy, and whether she needs an extra pair of hands.</li>
+    <li><b>Read the briefing:</b> the week’s top picks and anything urgent, like a cancellation or a subway closure.</li>
+    <li><b>Open an event:</b> the expected crowd, the distance, the relevant news and the buzz.</li>
+    <li><b>Ask the agent:</b> “Is this still on, and when will people pass the café?” It answers with sources.</li>
+    <li><b>Plan a campaign:</b> a themed special and a step-by-step plan, with the profit worked out.</li>
+    <li><b>Check Rush Radar:</b> which hours will be busy, and whether she needs an extra pair of hands.</li>
   </ol>
+  <p class="small muted">Every screenshot in this report carries a tag for the capability it shows:
+    <span class="cap-tag news" style="display:inline-block">News</span>
+    <span class="cap-tag agent" style="display:inline-block">Agent</span>
+    <span class="cap-tag" style="display:inline-block">Events</span>
+    <span class="cap-tag money" style="display:inline-block">Action</span>
+    <span class="cap-tag trust" style="display:inline-block">Trust</span></p>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>03 · Meet LocalLift</span></div>
-</section>
-
-<!-- ============ 04 FEATURES: shortlist + map ============ -->
-<section class="page">
-  <div class="kicker"><span class="num">4</span>The features</div>
-  <h2>Your <span class="grad">shortlist</span> and the map</h2>
-  <p class="lead">There are over 1,700 events within reach each fortnight. Maya doesn’t need 1,700. She needs the three that matter.</p>
-  <figure>
-    <div class="frame"><img src="shots/s02_shortlist.png" alt=""></div>
-    <figcaption><span class="cap-tag">Events</span><span><b>Top picks this week, on a live map.</b> Each event is scored on how close it is, how soon it is, how big the crowd is and whether it fits the café’s opening hours. The map pins the café in orange and the best opportunities in pink.</span></figcaption>
-  </figure>
-  <div class="grid2">
-    <div class="tile"><h4>How the ranking works</h4><p>A plain, explainable score: distance, timing, crowd size, demand evidence and café fit. No black box: the same inputs always give the same rank.</p></div>
-    <div class="tile"><h4>Crowd estimates, never “unknown”</h4><p>A published figure if there is one; otherwise the venue’s capacity (from Wikidata) times a typical sell-through; otherwise a ballpark for that type of event. Always labelled as an estimate.</p></div>
-  </div>
-  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
 </section>
 
 <!-- ============ 04 event detail ============ -->
@@ -290,7 +260,7 @@
         <li><b>Related news</b>Stories linked to this event, labelled with how well they’re confirmed.</li>
         <li><b>Official listing</b>A link to the source, and when we last checked it.</li>
       </ul>
-      <div class="callout" style="margin-top:14px"><h4>“#3 pick this week”</h4><p class="small">The shortlist ranks the next 7 days. A separate overall rank covers 14 days and gives extra credit to events further out, because they leave more time to prepare.</p></div>
+      <div class="callout" style="margin-top:14px"><h4>Crowd estimates, never “unknown”</h4><p class="small">A published figure if there is one; otherwise venue capacity times typical sell-through; otherwise a ballpark for that type of event. Always labelled as an estimate.</p></div>
     </div>
   </div>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
@@ -328,7 +298,7 @@
   </figure>
   <div class="side">
     <figure>
-      <div class="frame crop" style="max-height:118mm"><img src="shots/s07_development.png" alt=""></div>
+      <div class="frame crop" style="max-height:110mm"><img src="shots/s07_development.png" alt=""></div>
       <figcaption><span class="cap-tag news">News</span><span><b>One development, opened.</b> A city permit for a street event nearby, turned into a $0 promo.</span></figcaption>
     </figure>
     <div>
@@ -380,26 +350,13 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
   <div class="kicker"><span class="num">4</span>The features</div>
   <h2>From insight to <span class="grad">a plan that pays</span></h2>
   <figure>
-    <div class="frame"><img src="shots/s10_campaign.png" alt=""></div>
-    <figcaption><span class="cap-tag money">Action</span><span><b>Campaign plan.</b> A themed special built from the café’s real menu (here, the “Broadway Blue Brew” at $7.75), five steps from “assess and prepare” to “learn and retain”, each with dated tasks.</span></figcaption>
+    <div class="frame crop" style="max-height:92mm"><img src="shots/s10_campaign.png" alt=""></div>
+    <figcaption><span class="cap-tag money">Action</span><span><b>Campaign plan.</b> A themed special made from the café’s real menu (here, the “Broadway Blue Brew” at $7.75; no artist names or lyrics), ready-made sign and social copy, and five dated steps. Nothing is posted or sent automatically.</span></figcaption>
   </figure>
-  <div class="grid3" style="margin-top:12px">
-    <div class="tile"><div class="ic c1">1</div><h4>Themed, not generic</h4><p>The special nods to the event using real menu items. No artist names, no lyrics, add-ons under $0.40.</p></div>
-    <div class="tile"><div class="ic c2">2</div><h4>Ready-made copy</h4><p>Sign text, social captions and what staff should say, all editable.</p></div>
-    <div class="tile"><div class="ic c3">3</div><h4>Owner in control</h4><p>Draft, ready, running, done. Nothing is posted or sent automatically.</p></div>
-  </div>
-  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
-</section>
-
-<section class="page">
-  <div class="kicker"><span class="num">4</span>The features</div>
-  <h2>What could you <span class="grad">earn?</span></h2>
-  <p class="lead">Every plan comes with honest numbers: three scenarios, worked out by code, not by the AI.</p>
   <figure>
-    <div class="frame"><img src="shots/s11_results.png" alt=""></div>
-    <figcaption><span class="cap-tag money">Action</span><span><b>Results.</b> Slow, expected and busy scenarios after food, fees and campaign costs. Here the café would sell out its capacity, so LocalLift says so and lets Maya test “what if we could serve more?”. After the event she records what really happened.</span></figcaption>
+    <div class="frame crop" style="max-height:84mm"><img src="shots/s11_results.png" alt=""></div>
+    <figcaption><span class="cap-tag money">Action</span><span><b>What could you earn?</b> Slow, expected and busy scenarios after food, fees and campaign costs, worked out by code, not the AI. When demand is more than the café can serve per hour, it says so, so Maya doesn’t overspend on promotion she can’t serve. After the event she records what really happened.</span></figcaption>
   </figure>
-  <div class="callout"><h4>Why “expected” and “busy” can match</h4><p class="small">If more people want coffee than the café can make in an hour, the café’s limit sets the number, not the crowd. Showing that honestly stops an owner from over-spending on promotion they can’t serve.</p></div>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>04 · Features</span></div>
 </section>
 
@@ -431,50 +388,25 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
 
 <section class="page">
   <div class="kicker"><span class="num">5</span>How it is agentic</div>
-  <h2>Answers you can <span class="grad">check</span></h2>
+  <h2>Answers you can <span class="grad">check</span>, and a question it <span class="grad">keeps watching</span></h2>
   <div class="side">
     <figure>
-      <div class="frame crop" style="max-height:150mm"><img src="shots/s13_agent_answer.png" alt=""></div>
+      <div class="frame crop" style="max-height:100mm"><img src="shots/s13_agent_answer.png" alt=""></div>
       <figcaption><span class="cap-tag agent">Agent</span><span><b>A grounded answer</b>, about 5 seconds after asking.</span></figcaption>
     </figure>
     <div>
-      <h3 style="margin-top:0">What makes it trustworthy</h3>
       <ul class="pointlist">
         <li><b>A direct answer first</b>“Yes, it’s on. Expect the crowd from about 6pm.”</li>
-        <li><b>Every line is labelled</b>Sourced fact, inference, creative suggestion, owner assumption or unknown.</li>
-        <li><b>Sources are cited</b>The Ticketmaster listing ID, the official MSG page and the Wikidata venue record.</li>
-        <li><b>It says what would change its mind</b>Here: an official cancellation or reschedule.</li>
-        <li><b>The steps are on record</b>“Steps the agent took” shows every tool call, so anyone can audit it.</li>
+        <li><b>Every line is labelled and cited</b><span class="label l-fact">Fact</span><span class="label l-inf">Inference</span><span class="label l-ass">Assumption</span><span class="label l-unk">Unknown</span> with the Ticketmaster listing, MSG’s page or Wikidata as sources.</li>
+        <li><b>It adapts</b>When Ticketmaster’s page refused access, it switched to MSG’s official page instead of guessing.</li>
+        <li><b>The steps are on record</b>Every tool call is logged, so anyone can audit how it got there.</li>
       </ul>
     </div>
   </div>
-  <div class="callout">
-    <h4>It adapts when things go wrong</h4>
-    <p class="small">In one real run, Ticketmaster’s page refused access. Instead of giving up or guessing, the agent switched to Madison Square Garden’s official page, confirmed the date, recorded the claim and saved a plan. In another, the news service was rate-limited; the agent said so plainly and answered from what it could verify.</p>
-  </div>
-  <p class="small"><b>Every sentence is labelled:</b>
-    <span class="label l-fact">Fact</span> from a source,
-    <span class="label l-inf">Inference</span> reasoned from facts,
-    <span class="label l-ass">Assumption</span> the owner’s own setting,
-    <span class="label l-unk">Unknown</span> couldn’t be verified,
-    <span class="label l-dis">Disputed</span> sources disagree.</p>
-  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>05 · Agentic</span></div>
-</section>
-
-<section class="page">
-  <div class="kicker"><span class="num">5</span>How it is agentic</div>
-  <h2>“Follow a question”: <span class="grad">the agent keeps watch</span></h2>
-  <p class="lead">This is the feature that makes LocalLift feel like a colleague. Maya writes a question once, and the agent keeps checking the news for her.</p>
-  <figure>
-    <div class="frame"><img src="shots/s14_follow.png" alt=""></div>
-    <figcaption><span class="cap-tag agent">Agent</span><span><b>Your research agent.</b> Followed questions with their latest verdict. Each one can be opened, re-checked now or stopped.</span></figcaption>
+  <figure style="margin-top:14px">
+    <div class="frame crop" style="max-height:58mm"><img src="shots/s14_follow.png" alt=""></div>
+    <figcaption><span class="cap-tag agent">Agent</span><span><b>Follow a question.</b> Maya writes it once (“Let me know if the Rangers game is called off”). The agent checks right away with the listing, the news and the event’s history, gives a verdict with reasons, re-checks every 6 hours on its own, and alerts her only when the answer changes. Repeats and opinion pieces don’t set it off.</span></figcaption>
   </figure>
-  <ol class="steps">
-    <li><b>Maya asks</b> “Let me know if the Rangers game is called off.” She can type it on the Briefing page or in an event’s Ask tab.</li>
-    <li><b>The agent checks right away</b> using the listing, the news and the event’s history, then gives a verdict: <i>met</i> or <i>not met</i>, with reasons.</li>
-    <li><b>It re-checks every 6 hours</b> on its own, through the background worker.</li>
-    <li><b>It only alerts when the answer changes</b> from “not met” to “met”. Repeated or opinion articles don’t set it off, so no alert fatigue.</li>
-  </ol>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>05 · Agentic</span></div>
 </section>
 
@@ -520,6 +452,8 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
     <li>Learning from real outcomes: compare predicted walk-ins with recorded sales to tune the estimates.</li>
     <li>More neighbourhoods and business types: the same engine works for a bar near a stadium or a shop near a theatre.</li>
   </ul>
+  <div class="quote" style="margin-top:18px">The news already knew. Now the café does too.</div>
+  <p class="small muted">LocalLift finds what’s coming, checks it, explains why it matters and suggests one clear next step, while a person keeps the final say.</p>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>07 · Assignment</span></div>
 </section>
 
@@ -539,35 +473,15 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
     <tr><td><b>Social buzz</b></td><td><span class="tag">Bluesky API</span><span class="tag">X API v2</span></td><td>Post samples and volume trends; X capped at $5 a month</td></tr>
     <tr><td><b>Crowd estimates</b></td><td><span class="tag">Wikidata</span></td><td>Venue capacities, checked for errors</td></tr>
     <tr><td><b>Frontend</b></td><td><span class="tag">HTML, CSS, JavaScript</span><span class="tag">Leaflet + OpenStreetMap</span><span class="tag">Lucide icons</span></td><td>The dark, animated interface, the neighbourhood map and icons; no framework needed</td></tr>
-    <tr><td><b>Testing</b></td><td><span class="tag">pytest</span><span class="tag">Playwright</span></td><td>75 automated tests on fixed test data; Playwright took this document’s screenshots</td></tr>
-    <tr><td><b>Code &amp; hosting</b></td><td><span class="tag">GitHub</span><span class="tag">Vercel</span></td><td>Source control and the live prototype</td></tr>
+    <tr><td><b>Testing</b></td><td><span class="tag">pytest</span><span class="tag">Playwright</span></td><td>78 automated tests on fixed test data; Playwright took this document’s screenshots</td></tr>
+    <tr><td><b>Code &amp; hosting</b></td><td><span class="tag">GitHub</span><span class="tag">GitHub Actions</span><span class="tag">Vercel</span></td><td>Source control, the daily data refresh, and the live prototype (auto-deploys on every push)</td></tr>
   </table>
   <div class="links" style="margin-top:14px">
     <a class="lnk" href="https://locallift-pied-mu.vercel.app"><span class="lk">Try the live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
     <a class="lnk" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Read the code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
   </div>
-  <p class="small muted" style="margin-top:10px">The online prototype runs on a snapshot of the data from October 27, 2026. The full version, with the background worker and live refreshes, runs locally (see the README).</p>
+  <p class="small muted" style="margin-top:10px">The online prototype’s data is refreshed every morning by a GitHub Actions job that runs the same background jobs as the laptop version.</p>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>08 · How it’s built</span></div>
-</section>
-
-<!-- ============ CLOSING ============ -->
-<section class="page cover">
-  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-  <div class="inner" style="justify-content:center">
-    <div class="brand"><div class="mark">☕</div>LocalLift</div>
-    <h1 style="margin-top:22mm;font-size:36pt">The news already knew.<br><span style="color:#ffd2b8">Now the café does too.</span></h1>
-    <p class="sub">LocalLift reads the neighbourhood so a small business doesn’t have to. It finds what’s coming, checks it, explains why it matters, and suggests one clear next step, while a person keeps the final say.</p>
-    <div class="grid3" style="margin-top:20mm;color:#fff">
-      <div><div style="font:800 26pt 'Plus Jakarta Sans'">9</div><div class="small" style="opacity:.75">live data sources</div></div>
-      <div><div style="font:800 26pt 'Plus Jakarta Sans'">14</div><div class="small" style="opacity:.75">agent tools</div></div>
-      <div><div style="font:800 26pt 'Plus Jakarta Sans'">~5s</div><div class="small" style="opacity:.75">typical agent answer</div></div>
-    </div>
-    <div class="links" style="margin-top:16mm">
-      <a class="lnk dark" href="https://locallift-pied-mu.vercel.app"><span class="lk">Live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
-      <a class="lnk dark" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Source code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
-    </div>
-    <div style="margin-top:14mm;font:600 9pt 'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)">Sumeet Haldipur · Software Engineering Management · Fall 2026</div>
-  </div>
 </section>
 
 </body>
