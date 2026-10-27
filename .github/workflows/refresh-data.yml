@@ -1,0 +1,58 @@
+name: Daily data refresh
+
+# Refreshes the hosted demo's data once a day: runs every LocalLift worker job against the live sources, then
+# publishes the database as the "demo-data" release asset. The Vercel site loads the newest asset (locallift/snapshot.py).
+on:
+  schedule:
+    - cron: "0 10 * * *"   # 10:00 UTC = 6 AM New York (EDT)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LOCALLIFT_ENV: live
+      LOCALLIFT_DB: data/locallift.db
+      MODEL_PROVIDER: openai_compatible
+      OPENAI_COMPAT_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
+      OPENAI_COMPAT_MODEL: gemini-3.5-flash-lite
+      OPENAI_COMPAT_FALLBACK_MODELS: gemini-3.5-flash,gemini-3.8-flash
+      OPENAI_COMPAT_API_KEY: ${{ secrets.OPENAI_COMPAT_API_KEY }}
+      TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_SECRET: ${{ secrets.X_API_SECRET }}
+      # X stays under the same owner-approved $5/month cap, checked against X's own usage count.
+      ENABLE_PAID_SOURCES: "true"
+      X_MONTHLY_BUDGET_USD: "5"
+      X_MAX_POSTS_PER_QUERY: "10"
+      X_DAILY_EVENTS: "2"
+      X_MIN_HOURS_BETWEEN: "6"
+      X_INCLUDE_COUNTS: "true"
+      X_DAILY_CALL_LIMIT: "30"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Start from the latest published snapshot
+        run: |
+          mkdir -p data
+          gh release download demo-data -p locallift.db -D data --clobber || cp demo/locallift.db data/locallift.db
+      - name: Run every worker job once
+        run: python scripts/refresh_snapshot.py
+      - name: Publish the snapshot
+        run: |
+          gh release view demo-data >/dev/null 2>&1 || gh release create demo-data --title "Demo data (refreshed daily)" \
+            --notes "Database for the hosted prototype, refreshed daily by the Daily data refresh workflow. API keys are stripped." --latest=false
+          gh release upload demo-data data/locallift.db --clobber

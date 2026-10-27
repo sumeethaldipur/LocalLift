@@ -2,7 +2,8 @@
 
 **Sumeet Haldipur · Software Engineering Management · Fall 2026**
 
-- **Live prototype:** https://locallift-pied-mu.vercel.app (runs on a data snapshot from Oct 27, 2026; the AI agent and live refreshes need API keys set as Vercel environment variables)
+- **Live prototype:** https://locallift-pied-mu.vercel.app (data refreshed daily)
+- **Daily data refresh:** a GitHub Action (`.github/workflows/refresh-data.yml`) runs every worker job at 6 AM New York time and publishes the database as the `demo-data` release; the live site loads the newest copy within 3 hours.
 - **Project story (PDF):** [docs/report/LocalLift_Story.pdf](docs/report/LocalLift_Story.pdf)
 
 **LocalLift is an agentic local-news intelligence platform that helps cafés turn nearby developments into timely marketing and business decisions.**

@@ -11,7 +11,7 @@ from fastapi import Body, FastAPI, HTTPException
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
-from locallift import business, config, db, developments, finance, jobs, plans, ranking, services
+from locallift import business, config, db, developments, finance, jobs, plans, ranking, services, snapshot
 from locallift.agent import run as agent_run
 from locallift.geo import distance
 from locallift.sources import social
@@ -31,7 +31,15 @@ app = FastAPI(title="LocalLift", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
 
+@app.middleware("http")
+async def _fresh_demo_data(request, call_next):
+    if request.url.path.startswith("/api"):
+        snapshot.ensure()  # hosted demo only: load the latest daily snapshot
+    return await call_next(request)
+
+
 def _init() -> None:
+    snapshot.ensure()
     business.get_profile()
     business.ensure_history()
     social.x_status()
