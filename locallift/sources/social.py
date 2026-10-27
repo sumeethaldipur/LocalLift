@@ -6,6 +6,8 @@ Absence of sampled posts is not evidence of no demand.
 """
 from __future__ import annotations
 
+import os
+
 import hashlib
 import re
 from datetime import timedelta
@@ -187,9 +189,47 @@ def x_month_spend() -> float:
     return float(r["s"]) if r else 0.0
 
 
+def x_cycle_reads() -> int | None:
+    """Posts read this billing cycle, from X's own usage endpoint (free, reads no posts). Shared across every server,
+    unlike the local request log, so it holds the cap on hosted deployments. Cached for two minutes."""
+    if _x_usage.get("at") and (now_utc() - _x_usage["at"]).total_seconds() < 120:
+        return _x_usage["reads"]
+    try:
+        r = request("x", "GET", X_USAGE, retries=0, headers={"Authorization": f"Bearer {x_bearer_token()}"})
+        reads = int((r.json().get("data") or {}).get("project_usage"))
+    except (SourceError, TypeError, ValueError):
+        reads = None
+    _x_usage.update(at=now_utc(), reads=reads)
+    return reads
+
+
+def x_spent() -> float:
+    """Best estimate of this cycle's X spend: the larger of the local ledger and X's own read count (plus local
+    counts-call estimates). On Vercel, if X's count can't be read, fail closed rather than guess."""
+    local = x_month_spend()
+    reads = x_cycle_reads()
+    if reads is None:
+        return float("inf") if os.getenv("VERCEL") else local
+    start = now_utc().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    counts = db.q1("SELECT COALESCE(SUM(cost_usd),0) s FROM request_log WHERE provider='x' AND url LIKE '%/counts/%' "
+                   "AND started_at>=?", (iso(start),))
+    return max(local, reads * config.settings.x_cost_per_read + float(counts["s"] if counts else 0))
+
+
+def x_daily_calls_left() -> bool:
+    lim = config.settings.x_daily_call_limit
+    if lim <= 0:
+        return True
+    start = now_utc().replace(hour=0, minute=0, second=0, microsecond=0)
+    r = db.q1("SELECT COUNT(*) c FROM request_log WHERE provider='x' AND started_at>=? "
+              "AND (url LIKE '%/search/%' OR url LIKE '%/counts/%')", (iso(start),))
+    return (r["c"] if r else 0) < lim
+
+
 X_TOKEN = "https://api.x.com/oauth2/token"
 X_USAGE = "https://api.x.com/2/usage/tweets"
 _x_token: dict = {}
+_x_usage: dict = {}
 
 
 def x_has_credentials() -> bool:
@@ -263,7 +303,7 @@ def x_status() -> dict:
 def x_counts(q: str) -> dict:
     """Total matching posts per hour for the last 48 h (volume, not a sample). Two 24 h windows → trend."""
     s = config.settings
-    if x_month_spend() + s.x_counts_cost > s.x_monthly_budget:
+    if not x_daily_calls_left() or x_spent() + s.x_counts_cost > s.x_monthly_budget:
         raise SourceError("X monthly budget cap reached", kind="forbidden")
     now = now_utc().replace(microsecond=0) - timedelta(seconds=30)
     r = request("x", "GET", X_COUNTS, headers={"Authorization": f"Bearer {x_bearer_token()}"}, cost_usd=s.x_counts_cost,
@@ -288,7 +328,9 @@ def x_search(q: str, include_counts: bool = True) -> dict:
     if st["status"] != "connected":
         raise SourceError(st["detail"], kind="auth")
     per_call = s.x_max_posts * s.x_cost_per_read
-    if x_month_spend() + per_call > s.x_monthly_budget:
+    if not x_daily_calls_left():
+        raise SourceError("Daily X call limit reached on this server; try again tomorrow", kind="forbidden")
+    if x_spent() + per_call > s.x_monthly_budget:
         set_status("x", "social", "access_limited", "Monthly X budget cap reached.", "configured", next_step="Raise cap or wait.")
         raise SourceError("X monthly budget cap reached", kind="forbidden")
     headers = {"Authorization": f"Bearer {x_bearer_token()}"}

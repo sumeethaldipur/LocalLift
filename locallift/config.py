@@ -58,6 +58,8 @@ class Settings:
     x_min_hours_between: float = field(default_factory=lambda: _float("X_MIN_HOURS_BETWEEN", 6))
     x_include_counts: bool = field(default_factory=lambda: _bool("X_INCLUDE_COUNTS", False))
     x_counts_cost: float = field(default_factory=lambda: _float("X_COUNTS_COST_USD", 0.01))
+    # Per-server ceiling on paid X calls per day (0 = off). A second safety net on hosted deployments.
+    x_daily_call_limit: int = field(default_factory=lambda: _int("X_DAILY_CALL_LIMIT", 0))
     enable_paid: bool = field(default_factory=lambda: _bool("ENABLE_PAID_SOURCES", False))
 
     model_provider: str = field(default_factory=lambda: os.getenv("MODEL_PROVIDER", "none").strip().lower())
