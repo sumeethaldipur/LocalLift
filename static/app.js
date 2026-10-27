@@ -132,6 +132,14 @@ function agentProgress(el, eventId) {
   setTimeout(tick, 800);
   return () => { stop = true; };
 }
+// Clipboard API first; some browsers refuse it after an await, so fall back to a hidden textarea.
+async function copyText(txt) {
+  try { await navigator.clipboard.writeText(txt); return true; } catch (_) {}
+  const ta = Object.assign(document.createElement("textarea"), { value: txt, readOnly: true });
+  ta.style.cssText = "position:fixed;left:-9999px;top:0"; document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+  ta.remove(); return ok;
+}
 async function busy(btn, fn, label = "Working…") {
   const html = btn.innerHTML; btn.disabled = true; btn.innerHTML = `${ic("loader-2", "icon-sm spin")}${label}`; icons();
   try { return await fn(); } catch (e) { toast(e.message); } finally { btn.disabled = false; btn.innerHTML = html; icons(); }
@@ -376,14 +384,14 @@ function renderRadar() {
 function renderRadarDay() {
   const r = S.radar, d = r.days.find((x) => x.date === S.radarDay);
   const name = new Date(d.date + "T16:00:00Z").toLocaleDateString("en-US", { timeZone: TZ, weekday: "long", month: "short", day: "numeric" });
-  const busy = d.hours.filter((c) => c.extra >= 1);
-  const max = Math.max(r.capacity, ...busy.map((c) => c.total));
+  const busyHours = d.hours.filter((c) => c.extra >= 1);
+  const max = Math.max(r.capacity, ...busyHours.map((c) => c.total));
   const walk = {};
   d.hours.forEach((c) => c.events.forEach((e) => (walk[e.id] = (walk[e.id] || 0) + e.walkins)));
   const evs = d.events.filter((e) => (walk[e.id] || 0) >= 1).sort((a, b) => walk[b.id] - walk[a.id]).slice(0, 5);
   $("#radarDetail").innerHTML = `
     <div><h4>${name}</h4>
-      ${busy.length ? busy.map((c) => `<div class="peak"><span class="ph">${hrLabel(c.hour)}</span><span class="pbar"><span style="width:${c.total / max * 100}%"></span></span>
+      ${busyHours.length ? busyHours.map((c) => `<div class="peak"><span class="ph">${hrLabel(c.hour)}</span><span class="pbar"><span style="width:${c.total / max * 100}%"></span></span>
         <span class="pv">${Math.round(c.total)} / ${r.capacity} ${c.over_capacity ? '<span class="chip bad">over</span>' : "orders"}</span></div>`).join("")
         : `<p class="muted">No event-driven rush expected — a normal day.</p>`}
       ${d.staff_hours ? `<div class="staff-note">${ic("users", "icon-sm")} About <b>${d.staff_hours} extra staff hour${d.staff_hours > 1 ? "s" : ""}</b> would cover the peak (≈$${d.staff_hours * r.assumptions.labor_cost_per_hour}). Your call — or switch to grab-and-go only at peak.</div>` : ""}</div>
@@ -396,8 +404,8 @@ function renderRadarDay() {
   $("#radarDetail").querySelectorAll("[data-plan-ev]").forEach((b) => b.onclick = () => busy(b, () => buildPlan(b.dataset.planEv), "Building…"));
   $("#copyBrief").onclick = (e) => busy(e.currentTarget, async () => {
     const txt = await api(`/api/radar/${d.date}/briefing`);
-    try { await navigator.clipboard.writeText(txt); toast("Staff briefing copied — paste it into your team chat."); }
-    catch { openDrawer({ title: "Staff briefing", body: `<div class="answer">${esc(txt)}</div>` }); }
+    if (await copyText(txt)) toast("Staff briefing copied — paste it into your team chat.");
+    else openDrawer({ title: "Staff briefing", body: `<div class="answer">${esc(txt)}</div>` });
   });
   icons();
 }
