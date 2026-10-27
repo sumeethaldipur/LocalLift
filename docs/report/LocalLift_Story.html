@@ -118,6 +118,15 @@
   .l-unk { background: #f1f5f9; color: #475569; } .l-dis { background: #fee2e2; color: #991b1b; }
   ul.clean { padding-left: 18px; margin: 6px 0 10px; } ul.clean li { margin-bottom: 4px; }
   .toc { margin-top: 10px; }
+  .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .lnk { display: block; text-decoration: none; border-radius: 14px; padding: 12px 14px; color: #fff; background: var(--grad); }
+  .lnk .lk { display: block; font: 700 7.5pt "Plus Jakarta Sans"; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+  .lnk .lv { display: block; font: 700 10.5pt "Plus Jakarta Sans"; margin-top: 3px; word-break: break-all; }
+  .lnk.dark { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); }
+  .stack-table td { padding: 7px 11px; }
+  .stack-table td:first-child { width: 24%; }
+  .stack-table td:nth-child(2) { width: 34%; }
+  .tag { display: inline-block; font: 600 7.6pt Inter; padding: 2px 7px; border-radius: 6px; background: #f6f1fb; color: #5b3fb3; margin: 1px 2px 1px 0; }
   .toc a { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px dashed var(--line); color: var(--ink); text-decoration: none; }
   .toc .n { font: 800 11pt "Plus Jakarta Sans"; width: 26px; } .toc .t { font: 700 11pt "Plus Jakarta Sans"; } .toc .d { color: var(--faint); font-size: 9pt; margin-left: auto; }
 </style>
@@ -133,14 +142,14 @@
     <p class="sub">An AI research agent that reads the neighbourhood’s news, events and buzz, then tells a small café what’s coming, why it matters and what to do about it.</p>
     <div class="chips"><span class="chip">Agentic AI</span><span class="chip">Live local news</span><span class="chip">Event intelligence</span><span class="chip">Midtown NYC</span></div>
     <div class="shot-wrap"><img src="shots/s01_briefing.png" alt="LocalLift briefing home"></div>
-    <div class="meta"><span>Class project · Newsren brief</span><span>October 27, 2026</span></div>
+    <div class="meta"><span>Sumeet Haldipur · Software Engineering Management · Fall 2026</span><span>October 27, 2026</span></div>
   </div>
 </section>
 
 <!-- ============ CONTENTS ============ -->
 <section class="page">
   <div class="kicker">Inside</div>
-  <h2>The story in <span class="grad">seven parts</span></h2>
+  <h2>The story in <span class="grad">eight parts</span></h2>
   <p class="lead">This document follows one café owner through the problem, the idea, the product and the AI that does the work. Every screenshot is labelled with the capability it shows.</p>
   <div class="toc">
     <a><span class="n">01</span><span class="t">The problem</span><span class="d">A café that keeps finding out too late</span></a>
@@ -150,6 +159,11 @@
     <a><span class="n">05</span><span class="t">How it is agentic</span><span class="d">A goal, tools and a controlled process</span></a>
     <a><span class="n">06</span><span class="t">Trust and safety</span><span class="d">Why you can believe what it says</span></a>
     <a><span class="n">07</span><span class="t">How it meets the assignment</span><span class="d">Newsren plan, mapped feature by feature</span></a>
+    <a><span class="n">08</span><span class="t">How it’s built</span><span class="d">Tech stack, code and live prototype</span></a>
+  </div>
+  <div class="links" style="margin-top:16px">
+    <a class="lnk" href="https://locallift-pied-mu.vercel.app"><span class="lk">Live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
+    <a class="lnk" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Source code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
   </div>
   <div class="callout" style="margin-top:22px">
     <h4>How to read the screenshots</h4>
@@ -509,6 +523,33 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
   <div class="footer"><span>LocalLift</span><span class="bar"></span><span>07 · Assignment</span></div>
 </section>
 
+<!-- ============ 08 BUILT WITH ============ -->
+<section class="page">
+  <div class="kicker"><span class="num">8</span>How it’s built</div>
+  <h2>The <span class="grad">tech stack</span>, and what each part does</h2>
+  <p class="lead">Simple, well-known tools, chosen so the whole thing runs on a laptop and costs nothing beyond an optional $5 a month for X.</p>
+  <table class="stack-table">
+    <tr><th>Layer</th><th>Technology</th><th>What it does here</th></tr>
+    <tr><td><b>Backend &amp; API</b></td><td><span class="tag">Python 3</span><span class="tag">FastAPI</span><span class="tag">Uvicorn</span></td><td>Serves the web app and every API call: briefing, events, plans, projections, questions</td></tr>
+    <tr><td><b>Database</b></td><td><span class="tag">SQLite</span></td><td>Stores events, news, developments, claims, plans, outcomes and the agent’s run logs</td></tr>
+    <tr><td><b>Background worker</b></td><td><span class="tag">Python scheduler</span></td><td>Refreshes sources, re-checks followed questions every 6 hours, runs the daily X sample</td></tr>
+    <tr><td><b>AI agent</b></td><td><span class="tag">Gemini 3.5 Flash-Lite</span><span class="tag">Groq Llama 3.3 (backup)</span></td><td>Our own tool-use loop with 14 typed tools, budgets and validation. Also supports Claude.</td></tr>
+    <tr><td><b>Events</b></td><td><span class="tag">Ticketmaster Discovery API</span><span class="tag">NYC Parks Open Data</span></td><td>Concerts, games, shows and park events within 2 miles</td></tr>
+    <tr><td><b>News &amp; official alerts</b></td><td><span class="tag">Gothamist RSS</span><span class="tag">Google News RSS</span><span class="tag">GDELT</span><span class="tag">NYC street permits</span><span class="tag">MTA alerts</span></td><td>Local stories, event coverage, street closures and subway changes</td></tr>
+    <tr><td><b>Social buzz</b></td><td><span class="tag">Bluesky API</span><span class="tag">X API v2</span></td><td>Post samples and volume trends; X capped at $5 a month</td></tr>
+    <tr><td><b>Crowd estimates</b></td><td><span class="tag">Wikidata</span></td><td>Venue capacities, checked for errors</td></tr>
+    <tr><td><b>Frontend</b></td><td><span class="tag">HTML, CSS, JavaScript</span><span class="tag">Leaflet + OpenStreetMap</span><span class="tag">Lucide icons</span></td><td>The dark, animated interface, the neighbourhood map and icons; no framework needed</td></tr>
+    <tr><td><b>Testing</b></td><td><span class="tag">pytest</span><span class="tag">Playwright</span></td><td>75 automated tests on fixed test data; Playwright took this document’s screenshots</td></tr>
+    <tr><td><b>Code &amp; hosting</b></td><td><span class="tag">GitHub</span><span class="tag">Vercel</span></td><td>Source control and the live prototype</td></tr>
+  </table>
+  <div class="links" style="margin-top:14px">
+    <a class="lnk" href="https://locallift-pied-mu.vercel.app"><span class="lk">Try the live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
+    <a class="lnk" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Read the code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
+  </div>
+  <p class="small muted" style="margin-top:10px">The online prototype runs on a snapshot of the data from October 27, 2026. The full version, with the background worker and live refreshes, runs locally (see the README).</p>
+  <div class="footer"><span>LocalLift</span><span class="bar"></span><span>08 · How it’s built</span></div>
+</section>
+
 <!-- ============ CLOSING ============ -->
 <section class="page cover">
   <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
@@ -521,6 +562,11 @@ Script: “Heading to the show? We’re ready in two minutes.”</div>
       <div><div style="font:800 26pt 'Plus Jakarta Sans'">14</div><div class="small" style="opacity:.75">agent tools</div></div>
       <div><div style="font:800 26pt 'Plus Jakarta Sans'">~5s</div><div class="small" style="opacity:.75">typical agent answer</div></div>
     </div>
+    <div class="links" style="margin-top:16mm">
+      <a class="lnk dark" href="https://locallift-pied-mu.vercel.app"><span class="lk">Live prototype</span><span class="lv">locallift-pied-mu.vercel.app</span></a>
+      <a class="lnk dark" href="https://github.com/sumeethaldipur/LocalLift"><span class="lk">Source code</span><span class="lv">github.com/sumeethaldipur/LocalLift</span></a>
+    </div>
+    <div style="margin-top:14mm;font:600 9pt 'Plus Jakarta Sans';letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)">Sumeet Haldipur · Software Engineering Management · Fall 2026</div>
   </div>
 </section>
 

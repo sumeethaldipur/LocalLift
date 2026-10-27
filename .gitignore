@@ -9,3 +9,4 @@ output/
 .claude/
 *.db-shm
 *.db-wal
+.vercel

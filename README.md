@@ -1,5 +1,10 @@
 # LocalLift
 
+**Sumeet Haldipur · Software Engineering Management · Fall 2026**
+
+- **Live prototype:** https://locallift-pied-mu.vercel.app (runs on a data snapshot from Oct 27, 2026; the AI agent and live refreshes need API keys set as Vercel environment variables)
+- **Project story (PDF):** [docs/report/LocalLift_Story.pdf](docs/report/LocalLift_Story.pdf)
+
 **LocalLift is an agentic local-news intelligence platform that helps cafés turn nearby developments into timely marketing and business decisions.**
 
 The home page is a continuously updated **Local Briefing**: *What's happening around your café — and what it means for you*. Each briefing item follows one flow: local news or an official signal → investigation and verification → impact on the café → recommended action → monitoring and revision. Ranked event opportunities, the map, phased campaigns and the business-impact model all hang off that briefing.
